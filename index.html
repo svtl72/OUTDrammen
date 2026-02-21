@@ -7,19 +7,19 @@
     <style>
         :root { --primary: #2563eb; --success: #059669; --bg: #f8fafc; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; }
-        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         h1 { font-size: 24px; color: #1e293b; text-align: center; margin-bottom: 20px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; font-weight: 800; }
         label { font-weight: 700; display: block; margin: 15px 0 8px 0; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; }
-        select, input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; background-color: white; box-sizing: border-box; }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; background-color: white; box-sizing: border-box; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 12px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 13px; transition: 0.1s; }
-        .type-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2); }
-        .tema-section { display: none; } 
-        .tema-select { height: 150px; }
-        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 14px; transition: 0.2s; }
+        .type-btn.active { background: var(--primary) !important; color: white !important; border-color: var(--primary) !important; box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); }
+        .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .tema-select { height: 180px; margin-top: 5px; }
+        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; display: block; }
         #status { text-align: center; margin-top: 15px; font-weight: 600; color: var(--success); display: none; }
-        small { color: #64748b; font-size: 10px; display: block; margin-top: -5px; margin-bottom: 5px; }
+        small { color: #64748b; font-size: 10px; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -59,7 +59,7 @@
 
     <div id="temaSection" class="tema-section">
         <label>Temaer</label>
-        <small>(Velg ett eller flere temaer)</small>
+        <small>(Hold inne eller dra for å velge flere)</small>
         <select id="tema" class="tema-select" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
@@ -73,3 +73,117 @@
             <option value="Graviditet">Graviditet</option>
             <option value="Hjelpeapparat">Hjelpeapparat</option>
             <option value="Informasjonsarbeid">Informasjonsarbeid</option>
+            <option value="Jobb">Jobb</option>
+            <option value="Kriminalitet">Kriminalitet</option>
+            <option value="Mobbing">Mobbing</option>
+            <option value="Opphold">Opphold</option>
+            <option value="Psykisk helse">Psykisk helse</option>
+            <option value="Rasisme">Rasisme</option>
+            <option value="Rusmidler">Rusmidler</option>
+            <option value="Seksualitet">Seksualitet</option>
+            <option value="Vold">Vold</option>
+            <option value="Økonomi">Økonomi</option>
+        </select>
+    </div>
+
+    <label>Kjønn</label>
+    <div class="btn-grid btn-grid-3">
+        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')">GUTT</button>
+        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'JENTE')">JENTE</button>
+        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'ANNET')">ANNET</button>
+    </div>
+
+    <label>Alder</label>
+    <div class="btn-grid">
+        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'U-SKOLE')">U-SKOLE</button>
+        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'VGS')">VGS</button>
+        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', '18-25 år')">18-25 ÅR</button>
+        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'BLANDET')">BLANDET</button>
+    </div>
+
+    <label>Antall ungdommer</label>
+    <input type="number" id="antall" value="1" min="1">
+
+    <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
+    <div id="status">✅ Loggført i Google Sheets!</div>
+</div>
+
+<script>
+    let valgtKjønn = "";
+    let valgtAlder = "";
+    let valgtKontakt = "";
+
+    function velgVerdi(btn, type, verdi) {
+        // Finn alle knapper i samme gruppe og fjern 'active' klassen
+        const buttons = document.querySelectorAll('.' + type + '-btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        
+        // Legg til 'active' på knappen som ble trykket
+        btn.classList.add('active');
+        
+        if(type === 'contact') {
+            valgtKontakt = verdi;
+            const temaSection = document.getElementById('temaSection');
+            if(verdi === 'Omfattende') {
+                temaSection.style.display = 'block';
+            } else {
+                temaSection.style.display = 'none';
+            }
+        }
+        else if(type === 'gender') valgtKjønn = verdi;
+        else if(type === 'age') valgtAlder = verdi;
+    }
+
+    function sendData() {
+        const bydel = document.getElementById('bydel').value;
+        const lokasjon = document.getElementById('lokasjon').value;
+        const antall = document.getElementById('antall').value;
+        const temaSelect = document.getElementById('tema');
+        const valgteTemaer = Array.from(temaSelect.selectedOptions).map(opt => opt.value);
+        const btn = document.getElementById('submitBtn');
+        
+        if(!valgtKjønn || !valgtAlder || !valgtKontakt) {
+            alert("Vennligst velg både kontakt-type, kjønn og alder!");
+            return;
+        }
+
+        if(valgtKontakt === 'Omfattende' && valgteTemaer.length === 0) {
+            alert("Vennligst velg minst ett tema for omfattende treff!");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = "Lagrer...";
+
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse";
+        const data = new URLSearchParams();
+        
+        data.append("entry.842257148", bydel);
+        data.append("entry.214146964", lokasjon);
+        data.append("entry.1473666377", valgtKontakt);
+        data.append("entry.1346284831", antall);
+        data.append("entry.1163056236", valgtAlder);
+        data.append("entry.1511233883", valgtKjønn);
+        
+        if(valgtKontakt === 'Omfattende') {
+            valgteTemaer.forEach(t => data.append("entry.1946658553", t));
+        }
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: data
+        }).then(() => {
+            document.getElementById('status').style.display = "block";
+            btn.style.display = "none";
+            setTimeout(() => { location.reload(); }, 1200);
+        }).catch(e => {
+            alert("Noe gikk galt. Prøv igjen.");
+            btn.disabled = false;
+            btn.innerHTML = "LAGRE REGISTRERING";
+        });
+    }
+</script>
+
+</body>
+</html>
