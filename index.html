@@ -60,7 +60,7 @@
 
     <div id="temaSection" class="tema-section">
         <label>Temaer</label>
-        <small>(Velg ett eller flere temaer)</small>
+        <small>(Hold inne eller dra for å velge flere)</small>
         <select id="tema" class="tema-select" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
@@ -89,8 +89,8 @@
 
     <label>Kjønn</label>
     <div class="btn-grid btn-grid-3">
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')">GUTT</button>
         <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'JENTE')">JENTE</button>
+        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')">GUTT</button>
         <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'ANNET')">ANNET</button>
     </div>
 
@@ -103,7 +103,7 @@
     </div>
 
     <label>Antall ungdommer</label>
-    <input type="number" id="antall" value="1" min="1">
+    <input type="text" id="antall" placeholder="Antall eller tekst...">
 
     <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
     <div id="status">✅ Loggført i Google Sheets!</div>
@@ -141,42 +141,7 @@
             return;
         }
 
-        if(valgtKontakt === 'Omfattende' && valgteTemaer.length === 0) {
-            alert("Vennligst velg minst ett tema!");
-            return;
-        }
-
         btn.disabled = true;
         btn.innerHTML = "Lagrer...";
 
-        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse";
-        const data = new URLSearchParams();
-        
-        data.append("entry.842257148", bydel);
-        data.append("entry.214146964", lokasjon);
-        data.append("entry.1473666377", valgtKontakt);
-        data.append("entry.1346284831", antall);
-        data.append("entry.1163056236", valgtAlder);
-        data.append("entry.1511233883", valgtKjønn);
-        
-        if(valgtKontakt === 'Omfattende') {
-            valgteTemaer.forEach(t => data.append("entry.1946658553", t));
-        }
-
-        fetch(formURL, {
-            method: "POST",
-            mode: "no-cors",
-            body: data
-        }).then(() => {
-            document.getElementById('status').style.display = "block";
-            btn.style.display = "none";
-            setTimeout(() => { location.reload(); }, 1200);
-        }).catch(e => {
-            alert("Noe gikk galt.");
-            btn.disabled = false;
-            btn.innerHTML = "LAGRE REGISTRERING";
-        });
-    }
-</script>
-</body>
-</html>
+        const formURL = "
