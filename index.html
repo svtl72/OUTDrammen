@@ -13,13 +13,11 @@
         select, input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; background-color: white; box-sizing: border-box; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 14px; transition: 0.2s; }
-        .type-btn.active { background: var(--primary) !important; color: white !important; border-color: var(--primary) !important; box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); }
-        .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .tema-select { height: 180px; margin-top: 5px; }
-        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; display: block; }
+        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 14px; -webkit-appearance: none; }
+        .type-btn.active { background: var(--primary) !important; color: white !important; border-color: var(--primary) !important; }
+        .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; }
+        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
         #status { text-align: center; margin-top: 15px; font-weight: 600; color: var(--success); display: none; }
-        small { color: #64748b; font-size: 10px; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -54,14 +52,13 @@
 
     <label>Type treff</label>
     <div class="btn-grid">
-        <button type="button" class="type-btn contact-btn" onclick="velgVerdi(this, 'contact', 'Enkel')">ENKEL</button>
-        <button type="button" class="type-btn contact-btn" onclick="velgVerdi(this, 'contact', 'Omfattende')">OMFATTENDE</button>
+        <button type="button" class="type-btn contact-btn" onclick="velg('contact', 'Enkel', this)">ENKEL</button>
+        <button type="button" class="type-btn contact-btn" onclick="velg('contact', 'Omfattende', this)">OMFATTENDE</button>
     </div>
 
     <div id="temaSection" class="tema-section">
-        <label>Temaer</label>
-        <small>(Hold inne eller dra for å velge flere)</small>
-        <select id="tema" class="tema-select" multiple>
+        <label>Temaer (Velg flere)</label>
+        <select id="tema" style="height:150px" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
             <option value="Cannabis">Cannabis</option>
@@ -70,18 +67,8 @@
             <option value="Fremtid">Fremtid</option>
             <option value="Fritidsaktiviteter">Fritidsaktiviteter</option>
             <option value="Fysisk helse">Fysisk helse</option>
-            <option value="Gjeld">Gjeld</option>
-            <option value="Graviditet">Graviditet</option>
-            <option value="Hjelpeapparat">Hjelpeapparat</option>
-            <option value="Informasjonsarbeid">Informasjonsarbeid</option>
-            <option value="Jobb">Jobb</option>
-            <option value="Kriminalitet">Kriminalitet</option>
-            <option value="Mobbing">Mobbing</option>
-            <option value="Opphold">Opphold</option>
             <option value="Psykisk helse">Psykisk helse</option>
-            <option value="Rasisme">Rasisme</option>
             <option value="Rusmidler">Rusmidler</option>
-            <option value="Seksualitet">Seksualitet</option>
             <option value="Vold">Vold</option>
             <option value="Økonomi">Økonomi</option>
         </select>
@@ -89,59 +76,14 @@
 
     <label>Kjønn</label>
     <div class="btn-grid btn-grid-3">
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'JENTE')">JENTE</button>
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')">GUTT</button>
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'ANNET')">ANNET</button>
+        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'JENTE', this)">JENTE</button>
+        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'GUTT', this)">GUTT</button>
+        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'ANNET', this)">ANNET</button>
     </div>
 
     <label>Alder</label>
     <div class="btn-grid">
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'B-SKOLE')">B-SKOLE</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'U-SKOLE')">U-SKOLE</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'VGS')">VGS</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', '18-25 år')">18-25 ÅR</button>
-    </div>
-
-    <label>Antall ungdommer</label>
-    <input type="text" id="antall" placeholder="Antall eller tekst...">
-
-    <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
-    <div id="status">✅ Loggført i Google Sheets!</div>
-</div>
-
-<script>
-    let valgtKjønn = "";
-    let valgtAlder = "";
-    let valgtKontakt = "";
-
-    function velgVerdi(btn, type, verdi) {
-        const buttons = document.querySelectorAll('.' + type + '-btn');
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        if(type === 'contact') {
-            valgtKontakt = verdi;
-            const temaSection = document.getElementById('temaSection');
-            temaSection.style.display = (verdi === 'Omfattende') ? 'block' : 'none';
-        }
-        else if(type === 'gender') valgtKjønn = verdi;
-        else if(type === 'age') valgtAlder = verdi;
-    }
-
-    function sendData() {
-        const bydel = document.getElementById('bydel').value;
-        const lokasjon = document.getElementById('lokasjon').value;
-        const antall = document.getElementById('antall').value;
-        const temaSelect = document.getElementById('tema');
-        const valgteTemaer = Array.from(temaSelect.selectedOptions).map(opt => opt.value);
-        const btn = document.getElementById('submitBtn');
-        
-        if(!valgtKjønn || !valgtAlder || !valgtKontakt) {
-            alert("Vennligst velg både kontakt-type, kjønn og alder!");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerHTML = "Lagrer...";
-
-        const formURL = "
+        <button type="button" class="type-btn age-btn" onclick="velg('age', 'B-SKOLE', this)">B-SKOLE</button>
+        <button type="button" class="type-btn age-btn" onclick="velg('age', 'U-SKOLE', this)">U-SKOLE</button>
+        <button type="button" class="type-btn age-btn" onclick="velg('age', 'VGS', this)">VGS</button>
+        <button type="button" class="type-btn age-btn" onclick="velg('age', '18-25 år', this)">18-25 ÅR</button>
