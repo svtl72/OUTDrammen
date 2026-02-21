@@ -15,6 +15,7 @@
         .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
         .type-btn { background: white; border: 2px solid #e2e8f0; padding: 12px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 13px; transition: 0.1s; }
         .type-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2); }
+        .tema-section { display: none; } 
         .tema-select { height: 150px; }
         .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 25px; }
         #status { text-align: center; margin-top: 15px; font-weight: 600; color: var(--success); display: none; }
@@ -39,56 +40,16 @@
         <option value="Åssiden">Åssiden</option>
     </select>
 
-    <label>Spesifikk Lokasjon</label>
+    <label>Ungdomsklubb</label>
     <select id="lokasjon">
-        <option value="GATE">GATE</option>
-        <option value="FELLESVERKET">FELLESVERKET</option>
         <option value="G60">G60</option>
-        <option value="KLUBB">KLUBB</option>
-        <option value="SKOLE">SKOLE</option>
+        <option value="FELLESVERKET">FELLESVERKET</option>
+        <option value="NEON">NEON</option>
+        <option value="DOWN UNDER">DOWN UNDER</option>
+        <option value="UNDERGRUNN">UNDERGRUNN</option>
+        <option value="SKATTEKAMMERET">SKATTEKAMMERET</option>
+        <option value="NØSTEDHALLEN">NØSTEDHALLEN</option>
     </select>
-
-    <label>Temaer</label>
-    <small>(Hold inne Ctrl/Cmd eller dra for å velge flere)</small>
-    <select id="tema" class="tema-select" multiple>
-        <option value="Alkohol">Alkohol</option>
-        <option value="Bolig">Bolig</option>
-        <option value="Cannabis">Cannabis</option>
-        <option value="Familie">Familie</option>
-        <option value="Forhold">Forhold</option>
-        <option value="Fremtid">Fremtid</option>
-        <option value="Fritidsaktiviteter">Fritidsaktiviteter</option>
-        <option value="Fysisk helse">Fysisk helse</option>
-        <option value="Gjeld">Gjeld</option>
-        <option value="Graviditet">Graviditet</option>
-        <option value="Hjelpeapparat">Hjelpeapparat</option>
-        <option value="Informasjonsarbeid">Informasjonsarbeid</option>
-        <option value="Jobb">Jobb</option>
-        <option value="Kriminalitet">Kriminalitet</option>
-        <option value="Mobbing">Mobbing</option>
-        <option value="Opphold">Opphold</option>
-        <option value="Psykisk helse">Psykisk helse</option>
-        <option value="Rasisme">Rasisme</option>
-        <option value="Rusmidler">Rusmidler</option>
-        <option value="Seksualitet">Seksualitet</option>
-        <option value="Vold">Vold</option>
-        <option value="Økonomi">Økonomi</option>
-    </select>
-
-    <label>Kjønn</label>
-    <div class="btn-grid btn-grid-3">
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')">GUTT</button>
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'JENTE')">JENTE</button>
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'ANNET')">ANNET</button>
-    </div>
-
-    <label>Alder</label>
-    <div class="btn-grid">
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'U-SKOLE')">U-SKOLE</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'VGS')">VGS</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', '18-25 år')">18-25 ÅR</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'BLANDET')">BLANDET</button>
-    </div>
 
     <label>Type treff</label>
     <div class="btn-grid">
@@ -96,70 +57,19 @@
         <button type="button" class="type-btn contact-btn" onclick="velgVerdi(this, 'contact', 'Omfattende')">OMFATTENDE</button>
     </div>
 
-    <label>Antall ungdommer</label>
-    <input type="number" id="antall" value="1" min="1">
-
-    <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
-    <div id="status">✅ Loggført i Google Sheets!</div>
-</div>
-
-<script>
-    let valgtKjønn = "";
-    let valgtAlder = "";
-    let valgtKontakt = "";
-
-    function velgVerdi(btn, type, verdi) {
-        document.querySelectorAll('.' + type + '-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        if(type === 'gender') valgtKjønn = verdi;
-        else if(type === 'age') valgtAlder = verdi;
-        else valgtKontakt = verdi;
-    }
-
-    function sendData() {
-        const bydel = document.getElementById('bydel').value;
-        const lokasjon = document.getElementById('lokasjon').value;
-        const antall = document.getElementById('antall').value;
-        const temaSelect = document.getElementById('tema');
-        const valgteTemaer = Array.from(temaSelect.selectedOptions).map(opt => opt.value);
-        const btn = document.getElementById('submitBtn');
-        
-        if(!valgtKjønn || !valgtAlder || !valgtKontakt || valgteTemaer.length === 0) {
-            alert("Vennligst fyll ut alle feltene og velg minst ett tema!");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerHTML = "Lagrer...";
-
-        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse";
-        
-        // Vi bruker URLSearchParams for å kunne sende flere verdier for samme ID (Tema)
-        const data = new URLSearchParams();
-        data.append("entry.842257148", bydel);
-        data.append("entry.214146964", lokasjon);
-        data.append("entry.1473666377", valgtKontakt);
-        data.append("entry.1346284831", antall);
-        data.append("entry.1163056236", valgtAlder);
-        data.append("entry.1511233883", valgtKjønn);
-        
-        // Legger til hvert valgte tema
-        valgteTemaer.forEach(t => data.append("entry.1946658553", t));
-
-        fetch(formURL, {
-            method: "POST",
-            mode: "no-cors",
-            body: data
-        }).then(() => {
-            document.getElementById('status').style.display = "block";
-            btn.style.display = "none";
-            setTimeout(() => { location.reload(); }, 1200);
-        }).catch(e => {
-            alert("Feil ved lagring!");
-            btn.disabled = false;
-        });
-    }
-</script>
-
-</body>
-</html>
+    <div id="temaSection" class="tema-section">
+        <label>Temaer</label>
+        <small>(Velg ett eller flere temaer)</small>
+        <select id="tema" class="tema-select" multiple>
+            <option value="Alkohol">Alkohol</option>
+            <option value="Bolig">Bolig</option>
+            <option value="Cannabis">Cannabis</option>
+            <option value="Familie">Familie</option>
+            <option value="Forhold">Forhold</option>
+            <option value="Fremtid">Fremtid</option>
+            <option value="Fritidsaktiviteter">Fritidsaktiviteter</option>
+            <option value="Fysisk helse">Fysisk helse</option>
+            <option value="Gjeld">Gjeld</option>
+            <option value="Graviditet">Graviditet</option>
+            <option value="Hjelpeapparat">Hjelpeapparat</option>
+            <option value="Informasjonsarbeid">Informasjonsarbeid</option>
