@@ -6,37 +6,36 @@
     <title>OUT Drammen</title>
     <style>
         :root { --primary: #2563eb; --success: #059669; --bg: #f1f5f9; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
-        .kort { max-width: 450px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #1e3a8a; font-size: 22px; margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
-        label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 13px; color: #4b5563; text-transform: uppercase; }
-        select, input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; -webkit-appearance: none; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; padding-bottom: 30px; }
+        .kort { max-width: 450px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); box-sizing: border-box; }
+        h1 { text-align: center; color: #1e3a8a; font-size: 20px; margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 12px; color: #4b5563; text-transform: uppercase; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; -webkit-appearance: none; background: white; }
         
-        /* MOBIL-GRID */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
         
         .btn { 
             background: #fff; border: 2px solid #cbd5e1; padding: 16px 5px; 
             border-radius: 10px; font-weight: bold; cursor: pointer; color: #4b5563; 
-            font-size: 14px; transition: 0.1s; touch-action: manipulation;
+            font-size: 13px; transition: 0.1s; touch-action: manipulation;
         }
         
-        /* AKTIV KNAPP */
         .active { 
             background-color: var(--primary) !important; 
             color: white !important; 
             border-color: #1e40af !important; 
-            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
         }
 
         #temaSection { display: none; background: #f8fafc; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #cbd5e1; }
-        
+        .tema-select { height: 150px; }
+
         .save-btn { 
             background: var(--success); color: white; border: none; width: 100%; 
-            padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold; 
+            padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; 
             margin-top: 25px; cursor: pointer; -webkit-appearance: none;
         }
+        .save-btn:disabled { background: #94a3b8; }
     </style>
 </head>
 <body>
@@ -71,13 +70,13 @@
 
     <label>Type treff</label>
     <div class="grid">
-        <button type="button" class="btn t-btn" onclick="velg('t', 'Enkel', this)">ENKEL</button>
-        <button type="button" class="btn t-btn" onclick="velg('t', 'Omfattende', this)">OMFATTENDE</button>
+        <button type="button" class="btn t-btn" onclick="velg('t', 'ENKEL', this)">ENKEL</button>
+        <button type="button" class="btn t-btn" onclick="velg('t', 'OMFATTENDE', this)">OMFATTENDE</button>
     </div>
 
     <div id="temaSection">
-        <label>Temaer (Velg flere)</label>
-        <select id="tema" style="height:160px" multiple>
+        <label>Temaer (Hold inne for å velge flere)</label>
+        <select id="tema" class="tema-select" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
             <option value="Cannabis">Cannabis</option>
@@ -89,9 +88,58 @@
             <option value="Psykisk helse">Psykisk helse</option>
             <option value="Rusmidler">Rusmidler</option>
             <option value="Vold">Vold</option>
+            <option value="Økonomi">Økonomi</option>
         </select>
     </div>
 
     <label>Kjønn</label>
     <div class="grid grid-3">
-        <button type="button" class="btn k-btn" onclick="velg('k', 'JENTE
+        <button type="button" class="btn k-btn" onclick="velg('k', 'JENTE', this)">JENTE</button>
+        <button type="button" class="btn k-btn" onclick="velg('k', 'GUTT', this)">GUTT</button>
+        <button type="button" class="btn k-btn" onclick="velg('k', 'ANNET', this)">ANNET</button>
+    </div>
+
+    <label>Alder</label>
+    <div class="grid">
+        <button type="button" class="btn a-btn" onclick="velg('a', 'B-SKOLE', this)">B-SKOLE</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', 'U-SKOLE', this)">U-SKOLE</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', 'VGS', this)">VGS</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', '18-25 ÅR', this)">18-25 ÅR</button>
+    </div>
+
+    <label>Antall ungdommer</label>
+    <input type="text" id="antall" placeholder="Eks: 5">
+
+    <button type="button" class="save-btn" id="btnLagre" onclick="lagre()">LAGRE REGISTRERING</button>
+</div>
+
+<script>
+    var valg = { t: "", k: "", a: "" };
+
+    function velg(type, verdi, el) {
+        var knapper = document.querySelectorAll('.' + type + '-btn');
+        knapper.forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        valg[type] = verdi;
+        
+        if(type === 't') {
+            document.getElementById('temaSection').style.display = (verdi === 'OMFATTENDE') ? 'block' : 'none';
+        }
+    }
+
+    function lagre() {
+        if(!valg.t || !valg.k || !valg.a) {
+            alert("Vennligst velg Type treff, Kjønn og Alder!");
+            return;
+        }
+        
+        var btn = document.getElementById('btnLagre');
+        btn.disabled = true;
+        btn.innerHTML = "Lagrer...";
+
+        var p = new URLSearchParams();
+        // ID-er fra din siste pre-filled link
+        p.append("entry.842257148", document.getElementById('bydel').value);
+        p.append("entry.214146964", document.getElementById('lokasjon').value);
+        p.append("entry.1473666377", valg.t);
+        p.append("entry.1346284831", document.getElementById('antall').value);
