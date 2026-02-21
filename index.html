@@ -13,8 +13,8 @@
         select, input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: white; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .btn { background: #fff; border: 2px solid #cbd5e1; padding: 16px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #4b5563; font-size: 13px; }
-        .btn.active { background-color: var(--primary) !important; color: white !important; border-color: #1e40af !important; }
+        .btn { background: #fff; border: 2px solid #cbd5e1; padding: 16px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #4b5563; font-size: 13px; -webkit-appearance: none; }
+        .active { background-color: var(--primary) !important; color: white !important; border-color: #1e40af !important; }
         #temaSection { display: none; background: #f8fafc; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #cbd5e1; }
         .save-btn { background: var(--success); color: white; border: none; width: 100%; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 25px; cursor: pointer; }
     </style>
@@ -97,45 +97,42 @@
 </div>
 
 <script>
-    var valgene = { t: "", k: "", a: "" };
+    var valgt = { t: "", k: "", a: "" };
 
-    function velg(kategori, verdi, element) {
-        var knapper = document.querySelectorAll('.' + kategori + '-btn');
-        knapper.forEach(function(btn) { btn.classList.remove('active'); });
-        element.classList.add('active');
-        valgene[kategori] = verdi;
-        if(kategori === 't') {
-            document.getElementById('temaSection').style.display = (verdi === 'OMFATTENDE') ? 'block' : 'none';
-        }
+    function velg(kat, verdi, el) {
+        document.querySelectorAll('.' + kat + '-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        valgt[kat] = verdi;
+        if(kat === 't') document.getElementById('temaSection').style.display = (verdi === 'OMFATTENDE' ? 'block' : 'none');
     }
 
     function lagre() {
-        if(!valgene.t || !valgene.k || !valgene.a) {
-            alert("Vennligst trykk på knappene for å velge!");
-            return;
-        }
+        if(!valgt.t || !valgt.k || !valgt.a) return alert("Velg alle felt!");
         
         var btn = document.getElementById('btnLagre');
         btn.disabled = true;
         btn.innerHTML = "Lagrer...";
 
-        var p = new URLSearchParams();
-        p.append("entry.842257148", document.getElementById('bydel').value);
-        p.append("entry.214146964", document.getElementById('lokasjon').value);
-        p.append("entry.1473666377", valgene.t);
-        p.append("entry.1346284831", document.getElementById('antall').value);
-        p.append("entry.1163056236", valgene.a);
-        p.append("entry.1511233883", valgene.k);
+        // Vi bruker FormData for å sende data på samme måte som et vanlig skjema
+        var formData = new FormData();
+        formData.append("entry.842257148", document.getElementById('bydel').value);
+        formData.append("entry.214146964", document.getElementById('lokasjon').value);
+        formData.append("entry.1473666377", valgt.t);
+        formData.append("entry.1346284831", document.getElementById('antall').value);
+        formData.append("entry.1163056236", valgt.a);
+        formData.append("entry.1511233883", valgt.k);
 
         var temaer = Array.from(document.getElementById('tema').selectedOptions).map(o => o.value);
-        if(valgene.t === 'OMFATTENDE') {
-            temaer.forEach(t => p.append("entry.1946658553", t));
+        if(valgt.t === 'OMFATTENDE') {
+            temaer.forEach(t => formData.append("entry.1946658553", t));
         }
 
         fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
-            method: "POST", mode: "no-cors", body: p
+            method: "POST",
+            mode: "no-cors",
+            body: formData
         }).then(() => {
-            alert("Lagret! Sjekk Google Sheets.");
+            alert("Svar sendt!");
             location.reload();
         }).catch(() => {
             alert("Noe gikk galt.");
