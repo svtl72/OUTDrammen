@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html lang="no">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OUT Drammen</title>
+    <title>OUT Drammen - PC Versjon</title>
     <style>
-        :root { --primary: #2563eb; --success: #059669; --bg: #f8fafc; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; }
-        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { font-size: 24px; color: #1e293b; text-align: center; margin-bottom: 20px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; font-weight: 800; }
-        label { font-weight: 700; display: block; margin: 15px 0 8px 0; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; }
-        select, input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; background-color: white; box-sizing: border-box; }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 14px; transition: 0.2s; }
-        .type-btn.active { background: var(--primary) !important; color: white !important; border-color: var(--primary) !important; box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); }
-        .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .tema-select { height: 180px; margin-top: 5px; }
-        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; display: block; }
-        #status { text-align: center; margin-top: 15px; font-weight: 600; color: var(--success); display: none; }
-        small { color: #64748b; font-size: 10px; display: block; margin-bottom: 5px; }
+        body { font-family: Arial, sans-serif; background: #e5e7eb; padding: 40px; }
+        .kort { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #1e3a8a; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin: 20px 0 8px; font-size: 14px; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+        
+        /* KNAPPER */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .btn { 
+            background: #f8fafc; border: 2px solid #cbd5e1; padding: 15px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; color: #475569; font-size: 14px;
+        }
+        .btn:hover { background: #f1f5f9; }
+        
+        /* AKTIV FARGE */
+        .active { 
+            background-color: #2563eb !important; 
+            color: white !important; 
+            border-color: #1e40af !important; 
+        }
+
+        #temaBoks { display: none; background: #f1f5f9; padding: 20px; border-radius: 10px; margin-top: 15px; border: 1px solid #cbd5e1; }
+        .save-btn { 
+            background: #059669; color: white; border: none; width: 100%; 
+            padding: 20px; border-radius: 10px; font-size: 20px; font-weight: bold; 
+            cursor: pointer; margin-top: 30px; 
+        }
+        .save-btn:hover { background: #047857; }
     </style>
 </head>
 <body>
 
-<div class="app-card">
+<div class="kort">
     <h1>OUT Drammen 🚶‍♂️</h1>
     
     <label>Sted</label>
@@ -53,31 +66,100 @@
     </select>
 
     <label>Type treff</label>
-    <div class="btn-grid">
-        <button type="button" class="type-btn contact-btn" onclick="velgVerdi(this, 'contact', 'Enkel')">ENKEL</button>
-        <button type="button" class="type-btn contact-btn" onclick="velgVerdi(this, 'contact', 'Omfattende')">OMFATTENDE</button>
+    <div class="grid">
+        <button type="button" class="btn t-knapp" onclick="velg('t', 'Enkel', this)">ENKEL</button>
+        <button type="button" class="btn t-knapp" onclick="velg('t', 'Omfattende', this)">OMFATTENDE</button>
     </div>
 
-    <div id="temaSection" class="tema-section">
-        <label>Temaer</label>
-        <small>(Hold inne eller dra for å velge flere)</small>
-        <select id="tema" class="tema-select" multiple>
+    <div id="temaBoks">
+        <label>Temaer (Hold Ctrl for å velge flere)</label>
+        <select id="tema" style="height:150px" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
             <option value="Cannabis">Cannabis</option>
             <option value="Familie">Familie</option>
             <option value="Forhold">Forhold</option>
             <option value="Fremtid">Fremtid</option>
-            <option value="Fritidsaktiviteter">Fritidsaktiviteter</option>
             <option value="Fysisk helse">Fysisk helse</option>
             <option value="Psykisk helse">Psykisk helse</option>
             <option value="Rusmidler">Rusmidler</option>
             <option value="Vold">Vold</option>
-            <option value="Økonomi">Økonomi</option>
         </select>
     </div>
 
     <label>Kjønn</label>
-    <div class="btn-grid btn-grid-3">
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'JENTE')">JENTE</button>
-        <button type="button" class="type-btn gender-btn" onclick="velgVerdi(this, 'gender', 'GUTT')
+    <div class="grid grid-3">
+        <button type="button" class="btn k-knapp" onclick="velg('k', 'JENTE', this)">JENTE</button>
+        <button type="button" class="btn k-knapp" onclick="velg('k', 'GUTT', this)">GUTT</button>
+        <button type="button" class="btn k-knapp" onclick="velg('k', 'ANNET', this)">ANNET</button>
+    </div>
+
+    <label>Alder</label>
+    <div class="grid">
+        <button type="button" class="btn a-knapp" onclick="velg('a', 'B-SKOLE', this)">B-SKOLE</button>
+        <button type="button" class="btn a-knapp" onclick="velg('a', 'U-SKOLE', this)">U-SKOLE</button>
+        <button type="button" class="btn a-knapp" onclick="velg('a', 'VGS', this)">VGS</button>
+        <button type="button" class="btn a-knapp" onclick="velg('a', '18-25 år', this)">18-25 ÅR</button>
+    </div>
+
+    <label>Antall ungdommer</label>
+    <input type="text" id="antall" placeholder="Skriv antall her...">
+
+    <button type="button" class="save-btn" id="lagreBtn" onclick="lagreData()">LAGRE REGISTRERING</button>
+</div>
+
+<script>
+    var data = { t: "", k: "", a: "" };
+
+    function velg(type, verdi, element) {
+        // Finn alle knapper i samme kategori og fjern farge
+        var knapper = document.getElementsByClassName(type + '-knapp');
+        for (var i = 0; i < knapper.length; i++) {
+            knapper[i].classList.remove('active');
+        }
+        
+        // Gjør valgt knapp blå
+        element.classList.add('active');
+        data[type] = verdi;
+
+        // Vis tema hvis omfattende
+        if (type === 't') {
+            document.getElementById('temaBoks').style.display = (verdi === 'Omfattende') ? 'block' : 'none';
+        }
+    }
+
+    function lagreData() {
+        if (!data.t || !data.k || !data.a) {
+            alert("Vennligst trykk på knappene for å velge Treff-type, Kjønn og Alder!");
+            return;
+        }
+
+        var btn = document.getElementById('lagreBtn');
+        btn.disabled = true;
+        btn.innerHTML = "Sender til Google Sheets...";
+
+        var params = new URLSearchParams();
+        params.append("entry.842257148", document.getElementById('bydel').value);
+        params.append("entry.214146964", document.getElementById('lokasjon').value);
+        params.append("entry.1473666377", data.t);
+        params.append("entry.1346284831", document.getElementById('antall').value);
+        params.append("entry.1163056236", data.a);
+        params.append("entry.1511233883", data.k);
+
+        var temaer = Array.from(document.getElementById('tema').selectedOptions).map(o => o.value);
+        temaer.forEach(t => params.append("entry.1946658553", t));
+
+        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
+            method: "POST", mode: "no-cors", body: params
+        }).then(function() {
+            alert("Data er lagret!");
+            location.reload();
+        }).catch(function() {
+            alert("Noe gikk galt. Prøv igjen.");
+            btn.disabled = false;
+        });
+    }
+</script>
+
+</body>
+</html>
