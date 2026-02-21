@@ -10,20 +10,12 @@
         .kort { max-width: 450px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #1e3a8a; font-size: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top:0; }
         label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 12px; color: #4b5563; text-transform: uppercase; }
-        select, input[type="text"] { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: white; }
-        
+        select, input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: white; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        
         .btn { background: #fff; border: 2px solid #cbd5e1; padding: 16px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #4b5563; font-size: 13px; -webkit-appearance: none; }
         .active { background-color: var(--primary) !important; color: white !important; border-color: #1e40af !important; }
-
-        /* Stil for tema-sjekkbokser */
         #temaSection { display: none; background: #f8fafc; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #cbd5e1; }
-        .tema-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .tema-item { display: flex; align-items: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
-        .tema-item input { margin-right: 10px; transform: scale(1.3); }
-
         .save-btn { background: var(--success); color: white; border: none; width: 100%; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 25px; cursor: pointer; -webkit-appearance: none; }
     </style>
 </head>
@@ -64,21 +56,21 @@
     </div>
 
     <div id="temaSection">
-        <label>Velg Temaer (flere valg mulig)</label>
-        <div class="tema-grid">
-            <label class="tema-item"><input type="checkbox" name="tema" value="Alkohol"> Alkohol</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Bolig"> Bolig</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Cannabis"> Cannabis</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Familie"> Familie</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Forhold"> Forhold</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Fremtid"> Fremtid</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Fysisk helse"> Fysisk helse</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Kriminalitet"> Kriminalitet</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Psykisk helse"> Psykisk helse</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Rusmidler"> Rusmidler</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Vold"> Vold</label>
-            <label class="tema-item"><input type="checkbox" name="tema" value="Økonomi"> Økonomi</label>
-        </div>
+        <label>Temaer</label>
+        <select id="tema" style="height:150px" multiple>
+            <option value="Alkohol">Alkohol</option>
+            <option value="Bolig">Bolig</option>
+            <option value="Cannabis">Cannabis</option>
+            <option value="Familie">Familie</option>
+            <option value="Forhold">Forhold</option>
+            <option value="Fremtid">Fremtid</option>
+            <option value="Fysisk helse">Fysisk helse</option>
+            <option value="Kriminalitet">Kriminalitet</option>
+            <option value="Psykisk helse">Psykisk helse</option>
+            <option value="Rusmidler">Rusmidler</option>
+            <option value="Vold">Vold</option>
+            <option value="Økonomi">Økonomi</option>
+        </select>
     </div>
 
     <label>Kjønn</label>
@@ -91,4 +83,66 @@
     <label>Alder</label>
     <div class="grid grid-3">
         <button type="button" class="btn a-btn" onclick="velg('a', 'B-SKOLE', this)">B-SKOLE</button>
-        <button type="button" class="btn a-btn" onclick="velg('a', 'U-SKOLE', this)">U
+        <button type="button" class="btn a-btn" onclick="velg('a', 'U-SKOLE', this)">U-SKOLE</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', 'VGS', this)">VGS</button>
+    </div>
+    <div class="grid" style="margin-top:8px">
+        <button type="button" class="btn a-btn" onclick="velg('a', '18-25 ÅR', this)">18-25 ÅR</button>
+    </div>
+
+    <label>Antall ungdommer</label>
+    <input type="text" id="antall" placeholder="Eks: 5">
+
+    <button type="button" class="save-btn" id="btnLagre" onclick="lagre()">LAGRE REGISTRERING</button>
+</div>
+
+<script>
+    var valgt = { t: "", k: "", a: "" };
+
+    function velg(kat, verdi, el) {
+        document.querySelectorAll('.' + kat + '-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        valgt[kat] = verdi;
+        if(kat === 't') document.getElementById('temaSection').style.display = (verdi === 'OMFATTENDE' ? 'block' : 'none');
+    }
+
+    function lagre() {
+        if(!valgt.t || !valgt.k || !valgt.a) return alert("Vennligst velg alle felt før du lagrer!");
+        
+        var btn = document.getElementById('btnLagre');
+        btn.disabled = true;
+        btn.innerHTML = "Sender...";
+
+        // Vi går tilbake til den enkleste metoden for sending
+        var formURL = "https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse";
+        
+        var params = new URLSearchParams();
+        params.append("entry.842257148", document.getElementById('bydel').value);
+        params.append("entry.214146964", document.getElementById('lokasjon').value);
+        params.append("entry.1473666377", valgt.t);
+        params.append("entry.1346284831", document.getElementById('antall').value);
+        params.append("entry.1163056236", valgt.a);
+        params.append("entry.1511233883", valgt.k);
+
+        if(valgt.t === 'OMFATTENDE') {
+            var temaer = Array.from(document.getElementById('tema').selectedOptions).map(o => o.value);
+            temaer.forEach(t => params.append("entry.1946658553", t));
+        }
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+        }).then(() => {
+            alert("Suksess! Data er sendt.");
+            location.reload();
+        }).catch(() => {
+            alert("Noe gikk galt. Prøv igjen.");
+            btn.disabled = false;
+            btn.innerHTML = "LAGRE REGISTRERING";
+        });
+    }
+</script>
+</body>
+</html>
