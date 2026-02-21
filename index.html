@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OUT Drammen</title>
+    <style>
+        :root { --blue: #2563eb; --green: #059669; --bg: #f8fafc; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .app-card { width: 100%; max-width: 450px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); box-sizing: border-box; }
+        h1 { font-size: 22px; color: #1e293b; text-align: center; margin-bottom: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        
+        .tab { display: none; }
+        .active { display: block !important; }
+
+        label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 11px; color: #444; text-transform: uppercase; }
+        select, input[type="number"] { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 10px; box-sizing: border-box; }
+
+        /* Knapper som ser ut som fliser */
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .opt-input { display: none; }
+        .opt-label { display: block; background: #fff; border: 2px solid #ddd; padding: 14px 5px; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 600; color: #666; font-size: 14px; }
+        .opt-input:checked + .opt-label { background: var(--blue); color: white; border-color: var(--blue); }
+
+        /* Temaer (Avkrysningsbokser) */
+        #tema-section { display: none; margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 10px; border: 1px solid #e2e8f0; }
+        .tema-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .tema-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 13px; display: flex; align-items: center; cursor: pointer; }
+        .tema-item input { margin-right: 8px; }
+
+        /* Hovedknapper */
+        .next-btn { width: 100%; background: var(--blue); color: white; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .save-btn { width: 100%; background: var(--green); color: white; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: underline; cursor: pointer; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="app-card">
+    <div id="side1" class="tab active">
+        <h1>OUT Drammen 🚶‍♂️</h1>
+        
+        <label>Bydel / Sted</label>
+        <select id="sted">
+            <option value="Bragernes">Bragernes</option>
+            <option value="Gulskogen">Gulskogen</option>
+            <option value="Konnerud">Konnerud</option>
+            <option value="Krogstadelva">Krogstadelva</option>
+            <option value="Mjøndalen">Mjøndalen</option>
+            <option value="Solbergelva">Solbergelva</option>
+            <option value="Strømsø">Strømsø</option>
+            <option value="Åskollen">Åskollen</option>
+            <option value="Åssiden">Åssiden</option>
+        </select>
+
+        <label>Type treff</label>
+        <div class="btn-grid">
+            <input type="radio" name="treff" id="e" value="Enkel" class="opt-input" onchange="document.getElementById('tema-section').style.display='none'">
+            <label for="e" class="opt-label">Enkel</label>
+            
+            <input type="radio" name="treff" id="o" value="Omfattende" class="opt-input" onchange="document.getElementById('tema-section').style.display='block'">
+            <label for="o" class="opt-label">Omfattende</label>
+        </div>
+
+        <div id="tema-section">
+            <label>Velg Temaer</label>
+            <div class="tema-list">
+                <label class="tema-item"><input type="checkbox" name="tema" value="Alkohol"> Alkohol</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Bolig"> Bolig</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Cannabis"> Cannabis</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Familie"> Familie</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Forhold"> Forhold</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Fysisk helse"> Fysisk helse</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Psykisk helse"> Psykisk helse</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Kriminalitet"> Krim</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Rusmidler"> Rusmidler</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Økonomi"> Økonomi</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Vold"> Vold</label>
+                <label class="tema-item"><input type="checkbox" name="tema" value="Fritid"> Fritid</label>
+            </div>
+        </div>
+
+        <button type="button" class="next-btn" onclick="gaaTilSide2()">NESTE STEG →</button>
+    </div>
+
+    <div id="side2" class="tab">
+        <h1>Demografi 📊</h1>
+        
+        <label>Kjønn</label>
+        <div class="btn-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <input type="radio" name="kjonn" id="k1" value="Gutt" class="opt-input"><label for="k1" class="opt-label">Gutt</label>
+            <input type="radio" name="kjonn" id="k2" value="Jente" class="opt-input"><label for="k2" class="opt-label">Jente</label>
+            <input type="radio" name="kjonn" id="k3" value="Annet" class="opt-input"><label for="k3" class="opt-label">Annet</label>
+        </div>
+
+        <label>Alder</label>
+        <div class="btn-grid">
+            <input type="radio" name="alder" id="a1" value="Barneskole" class="opt-input"><label for="a1" class="opt-label">Barn</label>
+            <input type="radio" name="alder" id="a2" value="Ungdomskole" class="opt-input"><label for="a2" class="opt-label">U-skole</label>
+            <input type="radio" name="alder" id="a3" value="Videregående" class="opt-input"><label for="a3" class="opt-label">VGS</label>
+            <input type="radio" name="alder" id="a4" value="18-25 år" class="opt-input"><label for="a4" class="opt-label">18-25 år</label>
+        </div>
+
+        <label>Antall ungdommer</label>
+        <input type="number" id="antall" value="1">
+
+        <button type="button" class="save-btn" id="saveBtn" onclick="sendFormData()">LAGRE LOGG ✅</button>
+        <div class="back-link" onclick="gaaTilSide1()">← Gå tilbake</div>
+    </div>
+</div>
+
+<script>
+    function gaaTilSide2() {
+        const treffValgt = document.querySelector('input[name="treff"]:checked');
+        if (!treffValgt) { alert("Velg Enkel eller Omfattende først!"); return; }
+        document.getElementById('side1').classList.remove('active');
+        document.getElementById('side2').classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function gaaTilSide1() {
+        document.getElementById('side2').classList.remove('active');
+        document.getElementById('side1').classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function sendFormData() {
+        const sted = document.getElementById('sted').value;
+        const treff = document.querySelector('input[name="treff"]:checked');
+        const antall = document.getElementById('antall').value;
+        const alder = document.querySelector('input[name="alder"]:checked');
+        const kjonn = document.querySelector('input[name="kjonn"]:checked');
+
+        if (!alder || !kjonn) { alert("Mangler kjønn eller alder!"); return; }
+
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true; btn.innerText = "Lagrer...";
+
+        const fd = new URLSearchParams();
+        fd.append("entry.842257148", sted);
+        fd.append("entry.1473666377", treff.value);
+        fd.append("entry.1346284831", antall);
+        fd.append("entry.1163056236", alder.value);
+        fd.append("entry.1511233883", kjonn.value);
+
+        if (treff.value === "Omfattende") {
+            const temaer = document.querySelectorAll('input[name="tema"]:checked');
+            temaer.forEach(t => fd.append("entry.1946658553", t.value));
+            if (temaer.length === 0) fd.append("entry.1946658553", "Ingen tema valgt");
+        } else {
+            fd.append("entry.1946658553", "Enkel kontakt");
+        }
+
+        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
+            method: "POST", mode: "no-cors", body: fd.toString()
+        }).then(() => {
+            alert("Loggført! Svarene skal nå være synlige i Forms.");
+            location.reload();
+        }).catch(() => {
+            alert("Feil ved sending. Sjekk nettet.");
+            btn.disabled = false; btn.innerText = "LAGRE LOGG ✅";
+        });
+    }
+</script>
+
+</body>
+</html>
