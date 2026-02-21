@@ -6,18 +6,37 @@
     <title>OUT Drammen</title>
     <style>
         :root { --primary: #2563eb; --success: #059669; --bg: #f8fafc; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; }
-        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { font-size: 24px; color: #1e293b; text-align: center; margin-bottom: 20px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; font-weight: 800; }
-        label { font-weight: 700; display: block; margin: 15px 0 8px 0; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; }
-        select, input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; background-color: white; box-sizing: border-box; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; }
+        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 25px; box-sizing: border-box; }
+        h1 { font-size: 24px; text-align: center; color: #1e293b; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin: 15px 0 5px 0; font-size: 12px; text-transform: uppercase; color: #475569; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; margin-bottom: 10px; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .type-btn { background: white; border: 2px solid #e2e8f0; padding: 15px 5px; border-radius: 10px; font-weight: 600; cursor: pointer; color: #64748b; font-size: 14px; -webkit-appearance: none; }
-        .type-btn.active { background: var(--primary) !important; color: white !important; border-color: var(--primary) !important; }
+        
+        /* KNAPPE-STIL */
+        .type-btn { 
+            background: #ffffff; 
+            border: 2px solid #e2e8f0; 
+            padding: 15px 5px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: #64748b;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        /* AKTIV KNAPP - tvinger blå farge */
+        .type-btn.active { 
+            background-color: #2563eb !important; 
+            color: white !important; 
+            border-color: #1e40af !important; 
+        }
+
         .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; }
         .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
-        #status { text-align: center; margin-top: 15px; font-weight: 600; color: var(--success); display: none; }
+        #status { text-align: center; margin-top: 15px; font-weight: bold; color: var(--success); display: none; }
     </style>
 </head>
 <body>
@@ -87,3 +106,83 @@
         <button type="button" class="type-btn age-btn" onclick="velg('age', 'U-SKOLE', this)">U-SKOLE</button>
         <button type="button" class="type-btn age-btn" onclick="velg('age', 'VGS', this)">VGS</button>
         <button type="button" class="type-btn age-btn" onclick="velg('age', '18-25 år', this)">18-25 ÅR</button>
+    </div>
+
+    <label>Antall ungdommer</label>
+    <input type="text" id="antall" placeholder="Eks: 5">
+
+    <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
+    <div id="status">✅ Lagret!</div>
+</div>
+
+<script>
+    // Definerer variablene globalt
+    var valgteVerdier = { contact: "", gender: "", age: "" };
+
+    function velg(kategori, verdi, knappElement) {
+        console.log("Valgt:", kategori, verdi); // Debugging for PC
+        
+        // 1. Finn alle knapper i samme gruppe og fjern farge
+        var knapper = document.querySelectorAll('.' + kategori + '-btn');
+        knapper.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        
+        // 2. Gjør den trykkede knappen blå
+        knappElement.classList.add('active');
+        
+        // 3. Lagre verdien
+        valgteVerdier[kategori] = verdi;
+        
+        // 4. Vis tema-seksjon hvis det er omfattende
+        if(kategori === 'contact') {
+            var temaFelt = document.getElementById('temaSection');
+            if(verdi === 'Omfattende') {
+                temaFelt.style.display = 'block';
+            } else {
+                temaFelt.style.display = 'none';
+            }
+        }
+    }
+
+    function sendData() {
+        if(!valgteVerdier.contact || !valgteVerdier.gender || !valgteVerdier.age) {
+            alert("Vennligst velg både Treff-type, Kjønn og Alder!");
+            return;
+        }
+        
+        var btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = "Lagrer...";
+
+        var valgteTemaer = Array.from(document.getElementById('tema').selectedOptions).map(function(opt) { return opt.value; });
+        var params = new URLSearchParams();
+        
+        params.append("entry.842257148", document.getElementById('bydel').value);
+        params.append("entry.214146964", document.getElementById('lokasjon').value);
+        params.append("entry.1473666377", valgteVerdier.contact);
+        params.append("entry.1346284831", document.getElementById('antall').value);
+        params.append("entry.1163056236", valgteVerdier.age);
+        params.append("entry.1511233883", valgteVerdier.gender);
+        
+        valgteTemaer.forEach(function(t) {
+            params.append("entry.1946658553", t);
+        });
+
+        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
+            method: "POST", 
+            mode: "no-cors", 
+            body: params
+        }).then(function() {
+            document.getElementById('status').style.display = "block";
+            setTimeout(function() { 
+                location.reload(); 
+            }, 1000);
+        }).catch(function(err) {
+            alert("Noe gikk galt med tilkoblingen.");
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>
