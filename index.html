@@ -1,50 +1,41 @@
 <!DOCTYPE html>
-<html lang="no">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OUT Drammen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OUT</title>
     <style>
-        :root { --blue: #2563eb; --green: #059669; --light: #f8fafc; }
-        body { font-family: -apple-system, sans-serif; background: var(--light); margin: 0; padding-bottom: 100px; }
-        .container { max-width: 450px; margin: 0 auto; padding: 20px; background: white; min-height: 100vh; }
-        h1 { text-align: center; color: #1e293b; border-bottom: 2px solid var(--blue); padding-bottom: 10px; margin-top: 0; }
-        label { font-weight: bold; display: block; margin: 15px 0 5px 0; font-size: 13px; color: #475569; }
-        select, input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #f0f4f8; margin: 0; padding: 20px; padding-bottom: 100px; }
+        .kort { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; font-size: 22px; color: #1a365d; margin-top: 0; }
+        label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 12px; color: #4a5568; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
         
-        /* Knapper */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; }
-        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-        .btn { 
-            background: white; border: 2px solid #cbd5e1; padding: 15px 5px; 
-            border-radius: 8px; font-weight: bold; cursor: pointer; color: #64748b; font-size: 14px;
+        .valg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .valg-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        
+        /* KNAPPE-LOGIKK */
+        .knapp { 
+            background: #edf2f7; border: 2px solid #cbd5e0; padding: 15px 5px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; color: #4a5568; 
         }
-        
-        /* Denne stilen TVINGER knappen til å bli blå */
-        .btn.active { 
+        /* Denne klassen blir lagt på via JavaScript */
+        .valgt { 
             background-color: #2563eb !important; 
             color: white !important; 
             border-color: #1e40af !important; 
         }
 
-        #temaSeksjon { display: none; background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        #temaBoks { display: none; background: #ebf4ff; padding: 15px; border-radius: 6px; margin: 10px 0; }
         
-        /* BUNNMENY FOR LAGRE-KNAPP */
-        .footer { 
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            background: white; padding: 15px; border-top: 2px solid #e2e8f0;
-            display: flex; justify-content: center; z-index: 100;
-        }
-        .save-btn { 
-            background: #059669; color: white; border: none; width: 100%; max-width: 400px;
-            padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer;
-        }
-        #status { color: var(--green); text-align: center; font-weight: bold; margin-top: 10px; display: none; }
+        .bunn { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; border-top: 2px solid #e2e8f0; box-sizing: border-box; text-align: center; }
+        .lagre-btn { background: #059669; color: white; border: none; width: 100%; max-width: 350px; padding: 18px; border-radius: 10px; font-size: 18px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="kort">
+    <p style="color: red; font-size: 10px; text-align: center;">System-status: Aktiv v.5</p>
     <h1>OUT Drammen 🚶‍♂️</h1>
     
     <label>Bydel</label>
@@ -61,7 +52,7 @@
     </select>
 
     <label>Ungdomsklubb</label>
-    <select id="lokasjon">
+    <select id="klubb">
         <option value="-------">-------</option>
         <option value="G60">G60</option>
         <option value="FELLESVERKET">FELLESVERKET</option>
@@ -73,14 +64,14 @@
     </select>
 
     <label>Type treff</label>
-    <div class="grid">
-        <button type="button" class="btn t-btn" onclick="velg('t', 'Enkel', this)">ENKEL</button>
-        <button type="button" class="btn t-btn" onclick="velg('t', 'Omfattende', this)">OMFATTENDE</button>
+    <div class="valg-grid">
+        <button type="button" class="knapp t-btn" onclick="marker(this, 't', 'Enkel')">ENKEL</button>
+        <button type="button" class="knapp t-btn" onclick="marker(this, 't', 'Omfattende')">OMFATTENDE</button>
     </div>
 
-    <div id="temaSeksjon">
+    <div id="temaBoks">
         <label>Temaer (Velg flere)</label>
-        <select id="tema" style="height:120px" multiple>
+        <select id="tema" style="height:100px" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
             <option value="Cannabis">Cannabis</option>
@@ -95,28 +86,95 @@
     </div>
 
     <label>Kjønn</label>
-    <div class="grid grid-3">
-        <button type="button" class="btn k-btn" onclick="velg('k', 'JENTE', this)">JENTE</button>
-        <button type="button" class="btn k-btn" onclick="velg('k', 'GUTT', this)">GUTT</button>
-        <button type="button" class="btn k-btn" onclick="velg('k', 'ANNET', this)">ANNET</button>
+    <div class="valg-grid valg-grid-3">
+        <button type="button" class="knapp k-btn" onclick="marker(this, 'k', 'JENTE')">JENTE</button>
+        <button type="button" class="knapp k-btn" onclick="marker(this, 'k', 'GUTT')">GUTT</button>
+        <button type="button" class="knapp k-btn" onclick="marker(this, 'k', 'ANNET')">ANNET</button>
     </div>
 
     <label>Alder</label>
-    <div class="grid">
-        <button type="button" class="btn a-btn" onclick="velg('a', 'B-SKOLE', this)">B-SKOLE</button>
-        <button type="button" class="btn a-btn" onclick="velg('a', 'U-SKOLE', this)">U-SKOLE</button>
-        <button type="button" class="btn a-btn" onclick="velg('a', 'VGS', this)">VGS</button>
-        <button type="button" class="btn a-btn" onclick="velg('a', '18-25 år', this)">18-25 ÅR</button>
+    <div class="valg-grid">
+        <button type="button" class="knapp a-btn" onclick="marker(this, 'a', 'B-SKOLE')">B-SKOLE</button>
+        <button type="button" class="knapp a-btn" onclick="marker(this, 'a', 'U-SKOLE')">U-SKOLE</button>
+        <button type="button" class="knapp a-btn" onclick="marker(this, 'a', 'VGS')">VGS</button>
+        <button type="button" class="knapp a-btn" onclick="marker(this, 'a', '18-25 år')">18-25 ÅR</button>
     </div>
 
     <label>Antall ungdommer</label>
     <input type="text" id="antall" placeholder="Eks: 5">
-    <div id="status">✅ Lagret i Sheets!</div>
 </div>
 
-<div class="footer">
-    <button type="button" class="save-btn" id="s-btn" onclick="sendInn()">LAGRE REGISTRERING</button>
+<div class="bunn">
+    <button type="button" class="lagre-btn" id="hovedKnapp" onclick="sendData()">LAGRE REGISTRERING</button>
 </div>
 
 <script>
-    var valgene = { t: "", k:
+    // Globale verdier
+    var treffValgt = "";
+    var kjonnValgt = "";
+    var alderValgt = "";
+
+    function marker(knapp, type, verdi) {
+        // Fjern farge fra alle knapper i samme gruppe
+        var gruppe = document.getElementsByClassName(type + '-btn');
+        for (var i = 0; i < gruppe.length; i++) {
+            gruppe[i].classList.remove('valgt');
+        }
+        // Legg til farge på valgt knapp
+        knapp.classList.add('valgt');
+
+        // Lagre verdien i riktig variabel
+        if (type === 't') {
+            treffValgt = verdi;
+            document.getElementById('temaBoks').style.display = (verdi === 'Omfattende') ? 'block' : 'none';
+        }
+        if (type === 'k') kjonnValgt = verdi;
+        if (type === 'a') alderValgt = verdi;
+    }
+
+    function sendData() {
+        if (!treffValgt || !kjonnValgt || !alderValgt) {
+            alert("Feil: Du må velge Type treff, Kjønn og Alder!");
+            return;
+        }
+
+        var knapp = document.getElementById('hovedKnapp');
+        knapp.disabled = true;
+        knapp.innerHTML = "Sender...";
+
+        // Hent temaer
+        var temaListe = document.getElementById('tema');
+        var valgteTema = [];
+        for (var i = 0; i < temaListe.options.length; i++) {
+            if (temaListe.options[i].selected) valgteTema.push(temaListe.options[i].value);
+        }
+
+        // Bygg data-streng manuelt (mest robust)
+        var data = new URLSearchParams();
+        data.append("entry.842257148", document.getElementById('bydel').value);
+        data.append("entry.214146964", document.getElementById('klubb').value);
+        data.append("entry.1473666377", treffValgt);
+        data.append("entry.1346284831", document.getElementById('antall').value);
+        data.append("entry.1163056236", alderValgt);
+        data.append("entry.1511233883", kjonnValgt);
+        valgteTema.forEach(function(t) {
+            data.append("entry.1946658553", t);
+        });
+
+        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
+            method: "POST",
+            mode: "no-cors",
+            body: data
+        }).then(function() {
+            alert("Lagret!");
+            location.reload();
+        }).catch(function() {
+            alert("Nettverksfeil - prøv igjen.");
+            knapp.disabled = false;
+            knapp.innerHTML = "LAGRE REGISTRERING";
+        });
+    }
+</script>
+
+</body>
+</html>
