@@ -8,7 +8,7 @@
         :root { --primary: #2563eb; --success: #059669; --bg: #f1f5f9; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 10px; }
         .kort { max-width: 450px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #1e3a8a; font-size: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        h1 { text-align: center; color: #1e3a8a; font-size: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top:0; }
         label { font-weight: bold; display: block; margin: 15px 0 5px; font-size: 12px; color: #4b5563; text-transform: uppercase; }
         select, input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: white; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -16,7 +16,7 @@
         .btn { background: #fff; border: 2px solid #cbd5e1; padding: 16px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #4b5563; font-size: 13px; -webkit-appearance: none; }
         .active { background-color: var(--primary) !important; color: white !important; border-color: #1e40af !important; }
         #temaSection { display: none; background: #f8fafc; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #cbd5e1; }
-        .save-btn { background: var(--success); color: white; border: none; width: 100%; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 25px; cursor: pointer; }
+        .save-btn { background: var(--success); color: white; border: none; width: 100%; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 25px; cursor: pointer; -webkit-appearance: none; }
     </style>
 </head>
 <body>
@@ -107,36 +107,40 @@
     }
 
     function lagre() {
-        if(!valgt.t || !valgt.k || !valgt.a) return alert("Velg alle felt!");
+        if(!valgt.t || !valgt.k || !valgt.a) return alert("Vennligst velg alle felt før du lagrer!");
         
         var btn = document.getElementById('btnLagre');
         btn.disabled = true;
-        btn.innerHTML = "Lagrer...";
+        btn.innerHTML = "Sender...";
 
-        // Vi bruker FormData for å sende data på samme måte som et vanlig skjema
-        var formData = new FormData();
-        formData.append("entry.842257148", document.getElementById('bydel').value);
-        formData.append("entry.214146964", document.getElementById('lokasjon').value);
-        formData.append("entry.1473666377", valgt.t);
-        formData.append("entry.1346284831", document.getElementById('antall').value);
-        formData.append("entry.1163056236", valgt.a);
-        formData.append("entry.1511233883", valgt.k);
+        // Vi går tilbake til den enkleste metoden for sending
+        var formURL = "https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse";
+        
+        var params = new URLSearchParams();
+        params.append("entry.842257148", document.getElementById('bydel').value);
+        params.append("entry.214146964", document.getElementById('lokasjon').value);
+        params.append("entry.1473666377", valgt.t);
+        params.append("entry.1346284831", document.getElementById('antall').value);
+        params.append("entry.1163056236", valgt.a);
+        params.append("entry.1511233883", valgt.k);
 
-        var temaer = Array.from(document.getElementById('tema').selectedOptions).map(o => o.value);
         if(valgt.t === 'OMFATTENDE') {
-            temaer.forEach(t => formData.append("entry.1946658553", t));
+            var temaer = Array.from(document.getElementById('tema').selectedOptions).map(o => o.value);
+            temaer.forEach(t => params.append("entry.1946658553", t));
         }
 
-        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
+        fetch(formURL, {
             method: "POST",
             mode: "no-cors",
-            body: formData
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
         }).then(() => {
-            alert("Svar sendt!");
+            alert("Suksess! Data er sendt.");
             location.reload();
         }).catch(() => {
-            alert("Noe gikk galt.");
+            alert("Noe gikk galt. Prøv igjen.");
             btn.disabled = false;
+            btn.innerHTML = "LAGRE REGISTRERING";
         });
     }
 </script>
