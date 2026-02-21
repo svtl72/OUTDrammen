@@ -42,6 +42,7 @@
 
     <label>Ungdomsklubb</label>
     <select id="lokasjon">
+        <option value="-------">-------</option>
         <option value="G60">G60</option>
         <option value="FELLESVERKET">FELLESVERKET</option>
         <option value="NEON">NEON</option>
@@ -59,7 +60,7 @@
 
     <div id="temaSection" class="tema-section">
         <label>Temaer</label>
-        <small>(Hold inne eller dra for å velge flere)</small>
+        <small>(Velg ett eller flere temaer)</small>
         <select id="tema" class="tema-select" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
@@ -95,10 +96,10 @@
 
     <label>Alder</label>
     <div class="btn-grid">
+        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'B-SKOLE')">B-SKOLE</button>
         <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'U-SKOLE')">U-SKOLE</button>
         <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'VGS')">VGS</button>
         <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', '18-25 år')">18-25 ÅR</button>
-        <button type="button" class="type-btn age-btn" onclick="velgVerdi(this, 'age', 'BLANDET')">BLANDET</button>
     </div>
 
     <label>Antall ungdommer</label>
@@ -114,21 +115,14 @@
     let valgtKontakt = "";
 
     function velgVerdi(btn, type, verdi) {
-        // Finn alle knapper i samme gruppe og fjern 'active' klassen
         const buttons = document.querySelectorAll('.' + type + '-btn');
         buttons.forEach(b => b.classList.remove('active'));
-        
-        // Legg til 'active' på knappen som ble trykket
         btn.classList.add('active');
         
         if(type === 'contact') {
             valgtKontakt = verdi;
             const temaSection = document.getElementById('temaSection');
-            if(verdi === 'Omfattende') {
-                temaSection.style.display = 'block';
-            } else {
-                temaSection.style.display = 'none';
-            }
+            temaSection.style.display = (verdi === 'Omfattende') ? 'block' : 'none';
         }
         else if(type === 'gender') valgtKjønn = verdi;
         else if(type === 'age') valgtAlder = verdi;
@@ -148,7 +142,7 @@
         }
 
         if(valgtKontakt === 'Omfattende' && valgteTemaer.length === 0) {
-            alert("Vennligst velg minst ett tema for omfattende treff!");
+            alert("Vennligst velg minst ett tema!");
             return;
         }
 
@@ -178,12 +172,11 @@
             btn.style.display = "none";
             setTimeout(() => { location.reload(); }, 1200);
         }).catch(e => {
-            alert("Noe gikk galt. Prøv igjen.");
+            alert("Noe gikk galt.");
             btn.disabled = false;
             btn.innerHTML = "LAGRE REGISTRERING";
         });
     }
 </script>
-
 </body>
 </html>
