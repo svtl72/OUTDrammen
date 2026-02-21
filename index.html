@@ -5,43 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OUT Drammen</title>
     <style>
-        :root { --primary: #2563eb; --success: #059669; --bg: #f8fafc; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; }
-        .app-card { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 25px; box-sizing: border-box; }
-        h1 { font-size: 24px; text-align: center; color: #1e293b; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
-        label { font-weight: bold; display: block; margin: 15px 0 5px 0; font-size: 12px; text-transform: uppercase; color: #475569; }
-        select, input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; margin-bottom: 10px; }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        :root { --blue: #2563eb; --green: #059669; --light: #f8fafc; }
+        body { font-family: -apple-system, sans-serif; background: var(--light); margin: 0; padding-bottom: 100px; }
+        .container { max-width: 450px; margin: 0 auto; padding: 20px; background: white; min-height: 100vh; }
+        h1 { text-align: center; color: #1e293b; border-bottom: 2px solid var(--blue); padding-bottom: 10px; margin-top: 0; }
+        label { font-weight: bold; display: block; margin: 15px 0 5px 0; font-size: 13px; color: #475569; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         
-        /* KNAPPE-STIL */
-        .type-btn { 
-            background: #ffffff; 
-            border: 2px solid #e2e8f0; 
-            padding: 15px 5px; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            color: #64748b;
-            font-size: 14px;
-            transition: all 0.2s ease;
+        /* Knapper */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .btn { 
+            background: white; border: 2px solid #cbd5e1; padding: 15px 5px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; color: #64748b; font-size: 14px;
         }
         
-        /* AKTIV KNAPP - tvinger blå farge */
-        .type-btn.active { 
+        /* Denne stilen TVINGER knappen til å bli blå */
+        .btn.active { 
             background-color: #2563eb !important; 
             color: white !important; 
             border-color: #1e40af !important; 
         }
 
-        .tema-section { display: none; margin-top: 10px; background: #f1f5f9; padding: 15px; border-radius: 12px; }
-        .save-btn { background: var(--success); color: white; width: 100%; padding: 20px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
-        #status { text-align: center; margin-top: 15px; font-weight: bold; color: var(--success); display: none; }
+        #temaSeksjon { display: none; background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        
+        /* BUNNMENY FOR LAGRE-KNAPP */
+        .footer { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: white; padding: 15px; border-top: 2px solid #e2e8f0;
+            display: flex; justify-content: center; z-index: 100;
+        }
+        .save-btn { 
+            background: #059669; color: white; border: none; width: 100%; max-width: 400px;
+            padding: 18px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer;
+        }
+        #status { color: var(--green); text-align: center; font-weight: bold; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="app-card">
+<div class="container">
     <h1>OUT Drammen 🚶‍♂️</h1>
     
     <label>Bydel</label>
@@ -70,119 +73,50 @@
     </select>
 
     <label>Type treff</label>
-    <div class="btn-grid">
-        <button type="button" class="type-btn contact-btn" onclick="velg('contact', 'Enkel', this)">ENKEL</button>
-        <button type="button" class="type-btn contact-btn" onclick="velg('contact', 'Omfattende', this)">OMFATTENDE</button>
+    <div class="grid">
+        <button type="button" class="btn t-btn" onclick="velg('t', 'Enkel', this)">ENKEL</button>
+        <button type="button" class="btn t-btn" onclick="velg('t', 'Omfattende', this)">OMFATTENDE</button>
     </div>
 
-    <div id="temaSection" class="tema-section">
+    <div id="temaSeksjon">
         <label>Temaer (Velg flere)</label>
-        <select id="tema" style="height:150px" multiple>
+        <select id="tema" style="height:120px" multiple>
             <option value="Alkohol">Alkohol</option>
             <option value="Bolig">Bolig</option>
             <option value="Cannabis">Cannabis</option>
             <option value="Familie">Familie</option>
             <option value="Forhold">Forhold</option>
             <option value="Fremtid">Fremtid</option>
-            <option value="Fritidsaktiviteter">Fritidsaktiviteter</option>
             <option value="Fysisk helse">Fysisk helse</option>
             <option value="Psykisk helse">Psykisk helse</option>
             <option value="Rusmidler">Rusmidler</option>
             <option value="Vold">Vold</option>
-            <option value="Økonomi">Økonomi</option>
         </select>
     </div>
 
     <label>Kjønn</label>
-    <div class="btn-grid btn-grid-3">
-        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'JENTE', this)">JENTE</button>
-        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'GUTT', this)">GUTT</button>
-        <button type="button" class="type-btn gender-btn" onclick="velg('gender', 'ANNET', this)">ANNET</button>
+    <div class="grid grid-3">
+        <button type="button" class="btn k-btn" onclick="velg('k', 'JENTE', this)">JENTE</button>
+        <button type="button" class="btn k-btn" onclick="velg('k', 'GUTT', this)">GUTT</button>
+        <button type="button" class="btn k-btn" onclick="velg('k', 'ANNET', this)">ANNET</button>
     </div>
 
     <label>Alder</label>
-    <div class="btn-grid">
-        <button type="button" class="type-btn age-btn" onclick="velg('age', 'B-SKOLE', this)">B-SKOLE</button>
-        <button type="button" class="type-btn age-btn" onclick="velg('age', 'U-SKOLE', this)">U-SKOLE</button>
-        <button type="button" class="type-btn age-btn" onclick="velg('age', 'VGS', this)">VGS</button>
-        <button type="button" class="type-btn age-btn" onclick="velg('age', '18-25 år', this)">18-25 ÅR</button>
+    <div class="grid">
+        <button type="button" class="btn a-btn" onclick="velg('a', 'B-SKOLE', this)">B-SKOLE</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', 'U-SKOLE', this)">U-SKOLE</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', 'VGS', this)">VGS</button>
+        <button type="button" class="btn a-btn" onclick="velg('a', '18-25 år', this)">18-25 ÅR</button>
     </div>
 
     <label>Antall ungdommer</label>
     <input type="text" id="antall" placeholder="Eks: 5">
+    <div id="status">✅ Lagret i Sheets!</div>
+</div>
 
-    <button class="save-btn" id="submitBtn" onclick="sendData()">LAGRE REGISTRERING</button>
-    <div id="status">✅ Lagret!</div>
+<div class="footer">
+    <button type="button" class="save-btn" id="s-btn" onclick="sendInn()">LAGRE REGISTRERING</button>
 </div>
 
 <script>
-    // Definerer variablene globalt
-    var valgteVerdier = { contact: "", gender: "", age: "" };
-
-    function velg(kategori, verdi, knappElement) {
-        console.log("Valgt:", kategori, verdi); // Debugging for PC
-        
-        // 1. Finn alle knapper i samme gruppe og fjern farge
-        var knapper = document.querySelectorAll('.' + kategori + '-btn');
-        knapper.forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-        
-        // 2. Gjør den trykkede knappen blå
-        knappElement.classList.add('active');
-        
-        // 3. Lagre verdien
-        valgteVerdier[kategori] = verdi;
-        
-        // 4. Vis tema-seksjon hvis det er omfattende
-        if(kategori === 'contact') {
-            var temaFelt = document.getElementById('temaSection');
-            if(verdi === 'Omfattende') {
-                temaFelt.style.display = 'block';
-            } else {
-                temaFelt.style.display = 'none';
-            }
-        }
-    }
-
-    function sendData() {
-        if(!valgteVerdier.contact || !valgteVerdier.gender || !valgteVerdier.age) {
-            alert("Vennligst velg både Treff-type, Kjønn og Alder!");
-            return;
-        }
-        
-        var btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerHTML = "Lagrer...";
-
-        var valgteTemaer = Array.from(document.getElementById('tema').selectedOptions).map(function(opt) { return opt.value; });
-        var params = new URLSearchParams();
-        
-        params.append("entry.842257148", document.getElementById('bydel').value);
-        params.append("entry.214146964", document.getElementById('lokasjon').value);
-        params.append("entry.1473666377", valgteVerdier.contact);
-        params.append("entry.1346284831", document.getElementById('antall').value);
-        params.append("entry.1163056236", valgteVerdier.age);
-        params.append("entry.1511233883", valgteVerdier.gender);
-        
-        valgteTemaer.forEach(function(t) {
-            params.append("entry.1946658553", t);
-        });
-
-        fetch("https://docs.google.com/forms/d/e/1FAIpQLScEs6BU3u2dsdpIkwnu6SwVhwKWfW-oH97LnYGUvZtHEb4y3Q/formResponse", {
-            method: "POST", 
-            mode: "no-cors", 
-            body: params
-        }).then(function() {
-            document.getElementById('status').style.display = "block";
-            setTimeout(function() { 
-                location.reload(); 
-            }, 1000);
-        }).catch(function(err) {
-            alert("Noe gikk galt med tilkoblingen.");
-            btn.disabled = false;
-        });
-    }
-</script>
-</body>
-</html>
+    var valgene = { t: "", k:
